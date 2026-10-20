@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://cqow47bch5ocs"]
+
+[ext_resource type="Shader" uid="uid://csjy7fry7uy2f" path="res://line.gdshader" id="1_ig7tw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fixqm"]
+shader = ExtResource("1_ig7tw")
+shader_parameter/line_color = Color(0.6392157, 0.6, 1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ocly6"]
+shader = ExtResource("1_ig7tw")
+shader_parameter/line_color = Color(0.95686275, 0.95686275, 0.50980395, 1)
+
+[node name="scene" type="Node" unique_id=422408999]
+
+[node name="background" type="ColorRect" parent="." unique_id=943610378]
+offset_right = 336.0
+offset_bottom = 262.0
+color = Color(0.0627451, 0.06666667, 0.07058824, 1)
+
+[node name="line" type="Line2D" parent="." unique_id=357274711]
+material = SubResource("ShaderMaterial_fixqm")
+points = PackedVector2Array(0, 0, 100, 0, 100, 100)
+width = 4.0
+default_color = Color(1, 1, 0.5137255, 1)
+texture_mode = 1
+
+[node name="line2" type="Line2D" parent="." unique_id=1829653412]
+material = SubResource("ShaderMaterial_ocly6")
+position = Vector2(114, 15)
+points = PackedVector2Array(0, 0, 100, 0, 100, 100)
+width = 4.0
+default_color = Color(1, 1, 0.5137255, 1)
+texture_mode = 1
