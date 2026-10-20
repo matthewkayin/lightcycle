@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bk34ptficv6eg"]
+
+[ext_resource type="Shader" uid="uid://csjy7fry7uy2f" path="res://line.gdshader" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://bkbetdgxmlakh" path="res://player.gd" id="2_onrkg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fixqm"]
+shader = ExtResource("1_4flbx")
+shader_parameter/line_color = Color(0.45999992, 0.39999998, 1, 1)
+
+[node name="line" type="Line2D" unique_id=135738274]
+material = SubResource("ShaderMaterial_fixqm")
+points = PackedVector2Array(4, 0, 4, 8)
+width = 8.0
+default_color = Color(1, 1, 0.5137255, 1)
+texture_mode = 1
+script = ExtResource("2_onrkg")

@@ -7,8 +7,10 @@ void vertex() {
 }
 
 void fragment() {
-	float steps = 2.0;
-	float diff = 1.0 - (abs(UV.y - 0.5) / 0.5) + 0.5;
+	float steps = 6.0;
+	float diff = 1.0 - (abs(UV.y - 0.5) / 0.5);
+	diff += (1.0 - step(diff, 0.8)) * 0.5;
+	diff += 0.4;
 	diff = floor(diff * steps) / steps;
 	COLOR = line_color * diff;
 }
