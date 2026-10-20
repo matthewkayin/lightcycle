@@ -2,6 +2,7 @@ extends Node2D
 
 @export var player: String
 @export var starting_direction: Vector2i
+@export var texture: Texture2D
 
 @onready var debug_head = $debug_head
 
@@ -10,6 +11,20 @@ var tail: Array[Vector2i] = []
 var direction: Vector2i
 var color: Color
 var is_dead: bool
+
+enum Direction {
+	UP,
+	RIGHT,
+	DOWN,
+	LEFT
+}
+
+const SpriteLookup = [
+	0, 4, 1, 3,
+	3, 0, 6, 2,
+	1, 5, 0, 6,
+	3, 2, 6, 0
+]
 
 var DIRECTION_INPUTS: Array[String]
 const DIRECTION_VECTOR2I = [
@@ -56,7 +71,47 @@ func _process(_delta: float) -> void:
 			if target_direction != direction * -1:
 				direction = target_direction
 
+func get_frame_index(index: int) -> int:
+	if tail.size() == 1:
+		return 0
+
+	if index == tail.size() - 1:
+		match self.direction:
+			Vector2i.RIGHT: return 7
+			Vector2i.LEFT: return 8
+			Vector2i.UP: return 9
+			Vector2i.DOWN: return 10
+			_: return 0
+
+	var current = self.tail[index]
+
+	var next = self.tail[index + 1]
+	var next_direction: Direction
+	for direction_index in range(4):
+		if next == current + DIRECTION_VECTOR2I[direction_index]:
+			next_direction = direction_index as Direction
+			break
+
+	if index == 0:
+		match (next_direction + 2) % 4:
+			Direction.RIGHT: return 7
+			Direction.LEFT: return 8
+			Direction.UP: return 9
+			Direction.DOWN: return 10
+
+	var prev = self.tail[index - 1]
+	var prev_direction: Direction
+	for direction_index in range(4):
+		if prev == current + DIRECTION_VECTOR2I[direction_index]:
+			prev_direction = direction_index as Direction
+			break
+
+	return SpriteLookup[prev_direction + (next_direction * 4)]
+
 func _draw() -> void:
-	for cell in tail:
+	for index in range(tail.size()):
+		var frame_index = self.get_frame_index(index)
+		var cell = self.tail[index]
 		var rect = Rect2(cell * CELL_SIZE, Vector2(CELL_SIZE, CELL_SIZE))
-		draw_rect(rect, color)
+		var src_rect = Rect2(Vector2(frame_index * CELL_SIZE, 0), Vector2(CELL_SIZE, CELL_SIZE))
+		draw_texture_rect_region(self.texture, rect, src_rect)

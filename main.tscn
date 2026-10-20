@@ -4,6 +4,8 @@
 [ext_resource type="FontFile" uid="uid://cesec6k08077n" path="res://PublicPixel.ttf" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://b2ce2lyvtd1tq" path="res://background.gd" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://bkbetdgxmlakh" path="res://player.gd" id="3_h2yge"]
+[ext_resource type="Texture2D" uid="uid://dev474l6ypbtc" path="res://purple.png" id="4_lquwl"]
+[ext_resource type="Texture2D" uid="uid://dc6o6004k870e" path="res://yellow.png" id="5_7mycd"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_fixqm"]
 font = ExtResource("2_0xm2m")
@@ -18,12 +20,14 @@ color = Color(0.0627451, 0.06666667, 0.07058824, 1)
 script = ExtResource("2_h2yge")
 
 [node name="move_timer" type="Timer" parent="." unique_id=135127577]
-wait_time = 0.05
+wait_time = 0.06
 
 [node name="player1" type="Node2D" parent="." unique_id=1824841389]
+texture_filter = 1
 script = ExtResource("3_h2yge")
 player = "p1"
 starting_direction = Vector2i(1, 0)
+texture = ExtResource("4_lquwl")
 
 [node name="debug_head" type="ColorRect" parent="player1" unique_id=824276347]
 offset_left = 96.0
@@ -36,6 +40,7 @@ color = Color(0.45882353, 0.4, 1, 1)
 script = ExtResource("3_h2yge")
 player = "p2"
 starting_direction = Vector2i(-1, 0)
+texture = ExtResource("5_7mycd")
 
 [node name="debug_head" type="ColorRect" parent="player2" unique_id=1109136692]
 offset_left = 238.0

@@ -10,7 +10,7 @@ enum State {
 	GAME_OVER
 }
 
-const CELL_SIZE: int = 2
+const CELL_SIZE: int = 4
 const SCREEN_WIDTH: int = 336
 const SCREEN_HEIGHT: int = 262
 const GRID_WIDTH: int = SCREEN_WIDTH / CELL_SIZE
