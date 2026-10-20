@@ -1,9 +1,11 @@
 extends Node2D
 
 @onready var move_timer = $move_timer
+@onready var delay_timer = $delay_timer
 @onready var player1 = $player1
 @onready var player2 = $player2
 @onready var label = $label
+@onready var death_sound = $death_sound
 
 enum State {
 	RUNNING,
@@ -23,10 +25,15 @@ var state: State = State.RUNNING
 func _ready() -> void:
 	grid.resize(GRID_SIZE)
 	move_timer.timeout.connect(_on_timeout)
+	delay_timer.timeout.connect(_on_delay_timer_timeout)
 	self.set_running()
+
+func _on_delay_timer_timeout():
+	label.visible = true
 
 func set_running():
 	label.text = ""
+	label.visible = false
 	player1.setup(CELL_SIZE)
 	player2.setup(CELL_SIZE)
 	grid.resize(GRID_SIZE)
@@ -36,6 +43,7 @@ func set_running():
 
 func set_game_over(message: String):
 	label.text = message
+	self.delay_timer.start()
 	self.move_timer.stop()
 	self.state = State.GAME_OVER
 

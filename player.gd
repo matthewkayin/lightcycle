@@ -5,6 +5,7 @@ extends Node2D
 @export var texture: Texture2D
 
 @onready var debug_head = $debug_head
+@onready var death_anim = $death_anim
 
 var CELL_SIZE: int
 var tail: Array[Vector2i] = []
@@ -21,7 +22,7 @@ enum Direction {
 
 const SpriteLookup = [
 	0, 4, 1, 3,
-	3, 0, 6, 2,
+	4, 0, 5, 2,
 	1, 5, 0, 6,
 	3, 2, 6, 0
 ]
@@ -42,6 +43,16 @@ func _ready() -> void:
 		player + "_down",
 		player + "_left"
 	]
+	self.death_anim.animation_finished.connect(_on_animation_finished)
+
+func play_death_animation():
+	self.get_parent().death_sound.play()
+	self.death_anim.visible = true
+	self.death_anim.play()
+
+func _on_animation_finished():
+	self.death_anim.stop()
+	self.death_anim.visible = false
 
 func setup(with_cell_size: int):
 	self.CELL_SIZE = with_cell_size
@@ -59,6 +70,8 @@ func step():
 	var grid = get_parent()
 	if grid.is_blocked(next):
 		self.is_dead = true
+		self.death_anim.position = Vector2(next * CELL_SIZE) + Vector2(CELL_SIZE / 2, CELL_SIZE / 2)
+		self.play_death_animation()
 		return
 	grid.set_blocked(next, true)
 	tail.push_back(next)

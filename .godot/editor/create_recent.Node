@@ -1,5 +1,7 @@
-Label
+AudioStreamPlayer
 Timer
+AnimatedSprite2D
+Label
 Node2D
 ColorRect
 Line2D
