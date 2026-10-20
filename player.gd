@@ -9,6 +9,7 @@ var CELL_SIZE: int
 var tail: Array[Vector2i] = []
 var direction: Vector2i
 var color: Color
+var is_dead: bool
 
 var DIRECTION_INPUTS: Array[String]
 const DIRECTION_VECTOR2I = [
@@ -32,12 +33,17 @@ func setup(with_cell_size: int):
 	debug_head.visible = false
 	direction = starting_direction
 	var cell = Vector2i(debug_head.position) / CELL_SIZE
-	tail.push_back(cell)
+	self.tail = [cell]
+	self.is_dead = false
+
+func get_next():
+	return tail.back() + direction
 
 func step():
-	var next = tail.back() + direction
+	var next = self.get_next()
 	var grid = get_parent()
 	if grid.is_blocked(next):
+		self.is_dead = true
 		return
 	grid.set_blocked(next, true)
 	tail.push_back(next)

@@ -1,21 +1,24 @@
 [gd_scene format=3 uid="uid://cqow47bch5ocs"]
 
 [ext_resource type="Script" uid="uid://x4p65eigl4y3" path="res://main.gd" id="1_h2yge"]
+[ext_resource type="FontFile" uid="uid://cesec6k08077n" path="res://PublicPixel.ttf" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://b2ce2lyvtd1tq" path="res://background.gd" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://bkbetdgxmlakh" path="res://player.gd" id="3_h2yge"]
 
+[sub_resource type="LabelSettings" id="LabelSettings_fixqm"]
+font = ExtResource("2_0xm2m")
+
 [node name="scene" type="Node2D" unique_id=864486268]
 script = ExtResource("1_h2yge")
-
-[node name="move_timer" type="Timer" parent="." unique_id=135127577]
-wait_time = 0.05
-autostart = true
 
 [node name="background" type="ColorRect" parent="." unique_id=943610378]
 offset_right = 336.0
 offset_bottom = 262.0
 color = Color(0.0627451, 0.06666667, 0.07058824, 1)
 script = ExtResource("2_h2yge")
+
+[node name="move_timer" type="Timer" parent="." unique_id=135127577]
+wait_time = 0.05
 
 [node name="player1" type="Node2D" parent="." unique_id=1824841389]
 script = ExtResource("3_h2yge")
@@ -35,8 +38,23 @@ player = "p2"
 starting_direction = Vector2i(-1, 0)
 
 [node name="debug_head" type="ColorRect" parent="player2" unique_id=1109136692]
-offset_left = 228.0
+offset_left = 238.0
 offset_top = 128.0
-offset_right = 232.0
+offset_right = 242.0
 offset_bottom = 132.0
 color = Color(0.7294118, 0.7294118, 0.3882353, 1)
+
+[node name="label" type="Label" parent="." unique_id=1691384329]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 288.0
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 2
+label_settings = SubResource("LabelSettings_fixqm")
+horizontal_alignment = 1
