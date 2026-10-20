@@ -10,6 +10,7 @@ extends Node2D
 var CELL_SIZE: int
 var tail: Array[Vector2i] = []
 var direction: Vector2i
+var previous_step_direction: Vector2i
 var color: Color
 var is_dead: bool
 
@@ -58,6 +59,7 @@ func setup(with_cell_size: int):
 	self.CELL_SIZE = with_cell_size
 	debug_head.visible = false
 	direction = starting_direction
+	previous_step_direction = starting_direction
 	var cell = Vector2i(debug_head.position) / CELL_SIZE
 	self.tail = [cell]
 	self.is_dead = false
@@ -73,6 +75,7 @@ func step():
 		self.death_anim.position = Vector2(next * CELL_SIZE) + Vector2(CELL_SIZE / 2, CELL_SIZE / 2)
 		self.play_death_animation()
 		return
+	previous_step_direction = direction
 	grid.set_blocked(next, true)
 	tail.push_back(next)
 	queue_redraw()
@@ -81,7 +84,7 @@ func _process(_delta: float) -> void:
 	for direction_index in range(4):
 		if Input.is_action_just_pressed(DIRECTION_INPUTS[direction_index]):
 			var target_direction = DIRECTION_VECTOR2I[direction_index]
-			if target_direction != direction * -1:
+			if target_direction != previous_step_direction * -1:
 				direction = target_direction
 
 func get_frame_index(index: int) -> int:

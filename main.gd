@@ -6,8 +6,11 @@ extends Node2D
 @onready var player2 = $player2
 @onready var label = $label
 @onready var death_sound = $death_sound
+@onready var subtitle = $sublabel
+@onready var subtitle_timer = $subtitle_timer
 
 enum State {
+	TITLE,
 	RUNNING,
 	GAME_OVER
 }
@@ -20,24 +23,46 @@ const GRID_HEIGHT: int = SCREEN_HEIGHT / CELL_SIZE
 const GRID_SIZE: int = GRID_WIDTH * GRID_HEIGHT
 
 var grid: Array[bool]
-var state: State = State.RUNNING
+var state: State = State.TITLE
 
 func _ready() -> void:
 	grid.resize(GRID_SIZE)
 	move_timer.timeout.connect(_on_timeout)
 	delay_timer.timeout.connect(_on_delay_timer_timeout)
-	self.set_running()
+	subtitle_timer.timeout.connect(_on_subtitle_timeout)
+	self.set_title()
 
 func _on_delay_timer_timeout():
 	label.visible = true
 
-func set_running():
-	label.text = ""
-	label.visible = false
+func start_subtitle_blink():
+	subtitle_timer.start(1.0)
+
+func stop_subtitle_blink():
+	subtitle_timer.stop()
+	self.subtitle.visible = false
+
+func _on_subtitle_timeout():
+	subtitle_timer.start(0.5)
+	self.subtitle.visible = not self.subtitle.visible
+
+func reset_players():
 	player1.setup(CELL_SIZE)
 	player2.setup(CELL_SIZE)
 	grid.resize(GRID_SIZE)
 	grid.fill(false)
+
+func set_title():
+	self.label.text = "LIGHTCYCLE"
+	self.reset_players()
+	self.stop_subtitle_blink()
+	self.start_subtitle_blink()
+
+func set_running():
+	self.reset_players()
+	self.stop_subtitle_blink()
+	label.text = ""
+	label.visible = false
 	self.state = State.RUNNING
 	self.move_timer.start()
 
@@ -46,9 +71,10 @@ func set_game_over(message: String):
 	self.delay_timer.start()
 	self.move_timer.stop()
 	self.state = State.GAME_OVER
+	self.start_subtitle_blink()
 
 func is_in_bounds(cell: Vector2i) -> bool:
-	return !(cell.x < 1 || cell.y < 1 || cell.x >= GRID_WIDTH - 1 || cell.y >= GRID_HEIGHT - 1)
+	return !(cell.x < 1 || cell.y < 1 || cell.x >= GRID_WIDTH || cell.y >= GRID_HEIGHT)
 
 func is_blocked(cell: Vector2i) -> bool:
 	if !is_in_bounds(cell):
@@ -73,8 +99,15 @@ func _on_timeout():
 
 func _process(_delta: float) -> void:
 	var a_button_pressed = Input.is_action_just_pressed("p1_a") || Input.is_action_just_pressed("p2_a")
-	if self.state == State.GAME_OVER && a_button_pressed:
-		self.set_running()
+	var b_button_pressed = Input.is_action_just_pressed("p1_b") || Input.is_action_just_pressed("p2_b")
+	if self.state == State.TITLE:
+		if a_button_pressed:
+			self.set_running()
+	if self.state == State.GAME_OVER:
+		if a_button_pressed:
+			self.set_running()
+		elif b_button_pressed:
+			self.set_title()
 
 func _draw():
 	var border_rect = Rect2(Vector2(1, 1), Vector2(SCREEN_WIDTH - 1, SCREEN_HEIGHT - 1))

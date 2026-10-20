@@ -1,7 +1,6 @@
-res://line.gdshader
-res://main.tscn
 res://main.gd
-res://player.tscn
 res://player.gd
-res://head.gdshader
 res://background.gd
+res://main.tscn
+res://line.gdshader
+res://head.gdshader
